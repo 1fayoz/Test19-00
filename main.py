@@ -1,19 +1,20 @@
-from aiogram import types, Bot, Dispatcher
-from aiogram.filters import CommandStart 
+from aiogram import Bot, Dispatcher, Router
 import asyncio
+from test import router as test_router
 
 
-bot = Bot(token="8052894221:AAFIZUdw4wT_jn6fTy56WTVn-JIjyTsURfo")
-dp = Dispatcher()
 
-@dp.message(CommandStart())
-async def send_welcome(message: types.Message):
-    chat_id = message.chat.id
+router = Router()
+router.include_router(test_router)
 
-    await message.answer(text=f"Bu sizning ID: {chat_id}")
 
 
 async def main() -> None:
+    bot = Bot(token="8052894221:AAFIZUdw4wT_jn6fTy56WTVn-JIjyTsURfo")
+    dp = Dispatcher()
+
+    dp.include_router(router)
+
     print("started")
     await dp.start_polling(bot)
 
